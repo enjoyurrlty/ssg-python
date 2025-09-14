@@ -6,6 +6,7 @@ class TextType(Enum):
     CODE = "code" # `Code text`
     LINK = "link" # [anchor text](url)
     IMG = "img" # ![alt text](url)
+    TEXT = "" # regular text
 
 class TextNode():
     def __init__(self, text, text_type, url = None):

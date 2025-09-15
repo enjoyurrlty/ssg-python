@@ -1,5 +1,24 @@
+import re
 from leafnode import LeafNode
 from textnode import TextNode, TextType
+
+def extract_markdown_images(text):
+    matches = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+    return matches
+
+def extract_markdown_links(text):
+    matches = re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+    return matches
+
+def split_nodes_delimiter(old_nodes, delimiter, text_type):
+    new_nodes = []
+    for node in old_nodes:
+        splitted = node.text.split(delimiter)
+        
+        new_nodes.append(TextNode(splitted[0], TextType.TEXT))
+        new_nodes.append(TextNode(splitted[1], text_type))
+        new_nodes.append(TextNode(splitted[2], TextType.TEXT))
+    return new_nodes
 
 def text_node_to_html_node(text_node):
     match text_node.text_type:
@@ -23,7 +42,8 @@ def text_node_to_html_node(text_node):
 
 def main():
     print("hello world")
-    text = TextNode("this is anchor tag", TextType.LINK, "https://google.com")
+    text = TextNode("this _is anchor_ tag", TextType.LINK, "https://google.com")
     print(text)
+    print(split_nodes_delimiter([text], "_", TextType.ITALIC))
 
 main()
